@@ -1,12 +1,14 @@
 // ==UserScript==
 // @name         UCF Here Force Camera
 // @namespace    https://staybrowser.com/
-// @version      0.1
+// @version      0.2
 // @description  Template userscript created by Stay
 // @author       You
 // @match        tcode.github.io/*
 // @match        https://here.cdl.ucf.edu/*
 // @grant        none
+// @downloadURL  https://raw.githubusercontent.com/tcode-g/jssnippets/refs/heads/main/ucfhereforcecamera.js
+// @updateURL  https://raw.githubusercontent.com/tcode-g/jssnippets/refs/heads/main/ucfhereforcecamera.js
 // ==/UserScript==
 (function () {
     'use strict';
