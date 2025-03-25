@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UCFHere_Force_Cam
 // @namespace    https://staybrowser.com/
-// @version      0.06
+// @version      0.07
 // @description  Template userscript created by Stay
 // @author       You
 // @match        tcode.github.io/*
@@ -59,6 +59,7 @@
         logToDiv("----------------------------");
         logToDiv(typeof telephotoCamera);
         logToDiv(telephotoCamera instanceof MediaDeviceInfo);
+        logToDiv(telephotoCamera.toString());
         logToDiv("----------------------------");
 
         
