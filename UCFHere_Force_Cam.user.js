@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UCFHere_Force_Cam
 // @namespace    https://staybrowser.com/
-// @version      0.04
+// @version      0.05
 // @description  Template userscript created by Stay
 // @author       You
 // @match        tcode.github.io/*
@@ -12,6 +12,7 @@
 // ==/UserScript==
 (async () => {
     'use strict';
+    const originalgetUserMedia = navigator.mediaDevices.getUserMedia;
     let invisibleDiv = null;
     function logToDiv(message) {
         if (invisibleDiv === null) {
@@ -24,7 +25,7 @@
         invisibleDiv.appendChild(p);
     }
     async function getTelephotoCamera(){ 
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const stream = await originalgetUserMedia({ video: true });
         stream.getTracks().forEach(track => track.stop()); // Stop preview after permission granted
 
         // Now list available cameras
@@ -35,6 +36,7 @@
             logToDiv(cameras[0].label);
             return cameras[0];
         }
+        return null;
 
         // let telephotoCamera = null;
 
@@ -49,13 +51,13 @@
         // });
         // return telephotoCamera;
     }
-    let originalgetUserMedia = navigator.mediaDevices.getUserMedia;
     navigator.mediaDevices.getUserMedia = function(...args) {
         // alert("get user media interecept");
         //{ video: { facingMode: newFacingMode }
         let telephotoCamera = getTelephotoCamera();
         logToDiv(JSON.stringify(telephotoCamera));
-        if (telephotoCamera !== null || telephotoCamera == {}) {
+        
+        if (telephotoCamera != null) {
             logToDiv("found telephoto cam");
             let firstArg = args[0];
             if ("video" in firstArg) {
