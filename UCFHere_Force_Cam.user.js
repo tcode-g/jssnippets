@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UCFHere_Force_Cam
 // @namespace    https://staybrowser.com/
-// @version      0.08
+// @version      0.09
 // @description  Template userscript created by Stay
 // @author       You
 // @match        tcode.github.io/*
@@ -14,7 +14,9 @@
     'use strict';
     const originalgetUserMedia = navigator.mediaDevices.getUserMedia;
     let invisibleDiv = null;
-    function logToDiv(message) {
+    log("1");
+    function log(message) {
+        console.log(message);
         if (invisibleDiv === null) {
             invisibleDiv = document.createElement("div");
             invisibleDiv.style = "display: none;";
@@ -24,18 +26,22 @@
         let p = document.createTextNode(message);
         invisibleDiv.appendChild(p);
     }
+    log("2");
     async function getTelephotoCamera(){ 
+        log("2.1");
         const stream = await originalgetUserMedia({ video: true });
         stream.getTracks().forEach(track => track.stop()); // Stop preview after permission granted
-
+        log("2.2");
         // Now list available cameras
         const devices = await navigator.mediaDevices.enumerateDevices();
         const cameras = devices.filter(device => device.kind === "videoinput" && device.label === "Back Telephoto Camera");
+        log("2.3");
         if (cameras.length > 0) {
-            logToDiv("found telephoto cam");
-            logToDiv(cameras[0].label);
+            log("found telephoto cam");
+            log(cameras[0].label);
             return cameras[0];
         }
+        log("2.4");
         return null;
 
         // let telephotoCamera = null;
@@ -51,37 +57,43 @@
         // });
         // return telephotoCamera;
     }
+    log("3");
     navigator.mediaDevices.getUserMedia = async function(...args) {
+        log("3.1");
         // alert("get user media interecept");
         //{ video: { facingMode: newFacingMode }
         let telephotoCamera = await getTelephotoCamera();
+        log("3.2");
         // logToDiv(JSON.stringify(telephotoCamera));
-        logToDiv("----------------------------");
-        logToDiv(typeof telephotoCamera);
-        logToDiv(telephotoCamera instanceof MediaDeviceInfo);
-        logToDiv(telephotoCamera.toString());
-        logToDiv("----------------------------");
+        log("----------------------------");
+        log(typeof telephotoCamera);
+        log(telephotoCamera instanceof MediaDeviceInfo);
+        log(telephotoCamera.toString());
+        log("----------------------------");
+
+        log("3.3");
 
         
         if (telephotoCamera != null) {
-            logToDiv("found telephoto cam");
+            log("found telephoto cam");
             let firstArg = args[0];
             if ("video" in firstArg) {
-                logToDiv("good first arg");
-                logToDiv(JSON.stringify(firstArg));
+                log("good first arg");
+                log(JSON.stringify(firstArg));
                 let vidObj = firstArg["video"];
                 if ("facingMode" in vidObj) {
-                    logToDiv("good facing mode");
+                    log("good facing mode");
                     if (vidObj["facingMode"] === "environment") {
-                        logToDiv("different camera");
+                        log("different camera");
                         return originalgetUserMedia({video: { deviceId: { exact: telephotoCamera.deviceId }}})
                     }
                 }
             }
         }
-        logToDiv("intercepted getUserMedia");
+        log("intercepted getUserMedia");
         return originalgetUserMedia(...args);
     }
+    log("4");
 
     
 })();
