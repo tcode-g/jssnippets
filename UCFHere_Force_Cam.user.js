@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UCFHere_Force_Cam
 // @namespace    https://staybrowser.com/
-// @version      0.07
+// @version      0.08
 // @description  Template userscript created by Stay
 // @author       You
 // @match        tcode.github.io/*
@@ -51,10 +51,10 @@
         // });
         // return telephotoCamera;
     }
-    navigator.mediaDevices.getUserMedia = function(...args) {
+    navigator.mediaDevices.getUserMedia = async function(...args) {
         // alert("get user media interecept");
         //{ video: { facingMode: newFacingMode }
-        let telephotoCamera = getTelephotoCamera();
+        let telephotoCamera = await getTelephotoCamera();
         // logToDiv(JSON.stringify(telephotoCamera));
         logToDiv("----------------------------");
         logToDiv(typeof telephotoCamera);
