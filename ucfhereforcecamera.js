@@ -36,8 +36,7 @@
     invisibleDiv.id = "invisdiv";
     document.body.appendChild(invisibleDiv);
     function logToDiv(message) {
-        let p = document.createElement("p");
-        p.textContent = message;
+        let p = document.createTextNode(message);
         invisibleDiv.appendChild(p);
     }
     let originalgetUserMedia = navigator.mediaDevices.getUserMedia;
@@ -50,9 +49,10 @@
             let firstArg = args[0];
             if ("video" in firstArg) {
                 logToDiv("good first arg");
+                logToDiv(JSON.stringify(firstArg));
                 let vidObj = firstArg["video"];
                 if ("facingMode" in vidObj) {
-                    clogToDiv("good facing mode");
+                    logToDiv("good facing mode");
                     if (vidObj["facingMode"] === "environment") {
                         logToDiv("different camera");
                         return originalgetUserMedia({video: { deviceId: { exact: telephotoCamera.deviceId }}})
