@@ -7,7 +7,7 @@
 // @match        tcode.github.io/*
 // @match        https://here.cdl.ucf.edu/*
 // @grant        none
-// @downloadURL  https://raw.githubusercontent.com/tcode-g/jssnippets/refs/heads/main/ucfhereforcecamera.js
+// @downloadURL  https://raw.githubusercontent.com/tcode-g/jssnippets/refs/heads/main/ucfhereforcecamera.user.js
 // ==/UserScript==
 (async () => {
     'use strict';
