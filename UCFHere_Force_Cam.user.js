@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UCFHere_Force_Cam
 // @namespace    https://staybrowser.com/
-// @version      0.03
+// @version      0.04
 // @description  Template userscript created by Stay
 // @author       You
 // @match        tcode.github.io/*
@@ -24,27 +24,30 @@
         invisibleDiv.appendChild(p);
     }
     async function getTelephotoCamera(){ 
-        // const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        // stream.getTracks().forEach(track => track.stop()); // Stop preview after permission granted
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        stream.getTracks().forEach(track => track.stop()); // Stop preview after permission granted
 
         // Now list available cameras
         const devices = await navigator.mediaDevices.enumerateDevices();
-        const cameras = devices.filter(device => device.kind === "videoinput");
+        const cameras = devices.filter(device => device.kind === "videoinput" && device.label === "Back Telephoto Camera");
+        if (cameras.length > 0) {
+            logToDiv("found telephoto cam");
+            logToDiv(cameras[0].label);
+            return cameras[0];
+        }
 
-        cameraSelect.innerHTML = ""; 
+        // let telephotoCamera = null;
 
-        let telephotoCamera = null;
-
-        cameras.forEach((camera, index) => {
-            // Check for "Back Telephoto Camera"
-            logToDiv(camera.label);
-            if (camera.label.includes("Back Telephoto Camera")) {
-                logToDiv("found telephoto cam");
-                logToDiv(JSON.stringify(telephotoCamera));
-                telephotoCamera = camera;
-            }
-        });
-        return telephotoCamera;
+        // cameras.forEach((camera, index) => {
+        //     // Check for "Back Telephoto Camera"
+        //     logToDiv(camera.label);
+        //     if (camera.label.includes("Back Telephoto Camera")) {
+        //         logToDiv("found telephoto cam");
+        //         logToDiv(telephotoCamera);
+        //         telephotoCamera = camera;
+        //     }
+        // });
+        // return telephotoCamera;
     }
     let originalgetUserMedia = navigator.mediaDevices.getUserMedia;
     navigator.mediaDevices.getUserMedia = function(...args) {
