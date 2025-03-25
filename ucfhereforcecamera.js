@@ -12,8 +12,8 @@
 (async () => {
     'use strict';
     async function getTelephotoCamera(){ 
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        stream.getTracks().forEach(track => track.stop()); // Stop preview after permission granted
+        // const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        // stream.getTracks().forEach(track => track.stop()); // Stop preview after permission granted
 
         // Now list available cameras
         const devices = await navigator.mediaDevices.enumerateDevices();
