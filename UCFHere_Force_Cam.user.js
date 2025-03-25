@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UCFHere_Force_Cam
 // @namespace    https://staybrowser.com/
-// @version      0.02
+// @version      0.03
 // @description  Template userscript created by Stay
 // @author       You
 // @match        tcode.github.io/*
@@ -12,6 +12,17 @@
 // ==/UserScript==
 (async () => {
     'use strict';
+    let invisibleDiv = null;
+    function logToDiv(message) {
+        if (invisibleDiv === null) {
+            invisibleDiv = document.createElement("div");
+            invisibleDiv.style = "display: none;";
+            invisibleDiv.id = "invisdiv";
+            document.body.appendChild(invisibleDiv);
+        }
+        let p = document.createTextNode(message);
+        invisibleDiv.appendChild(p);
+    }
     async function getTelephotoCamera(){ 
         // const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         // stream.getTracks().forEach(track => track.stop()); // Stop preview after permission granted
@@ -26,22 +37,14 @@
 
         cameras.forEach((camera, index) => {
             // Check for "Back Telephoto Camera"
+            logToDiv(camera.label);
             if (camera.label.includes("Back Telephoto Camera")) {
+                logToDiv("found telephoto cam");
+                logToDiv(JSON.stringify(telephotoCamera));
                 telephotoCamera = camera;
             }
         });
         return telephotoCamera;
-    }
-    let invisibleDiv = null;
-    function logToDiv(message) {
-        if (invisibleDiv === null) {
-            invisibleDiv = document.createElement("div");
-            invisibleDiv.style = "display: none;";
-            invisibleDiv.id = "invisdiv";
-            document.body.appendChild(invisibleDiv);
-        }
-        let p = document.createTextNode(message);
-        invisibleDiv.appendChild(p);
     }
     let originalgetUserMedia = navigator.mediaDevices.getUserMedia;
     navigator.mediaDevices.getUserMedia = function(...args) {
@@ -49,7 +52,7 @@
         //{ video: { facingMode: newFacingMode }
         let telephotoCamera = getTelephotoCamera();
         logToDiv(JSON.stringify(telephotoCamera));
-        if (telephotoCamera !== null) {
+        if (telephotoCamera !== null || telephotoCamera == {}) {
             logToDiv("found telephoto cam");
             let firstArg = args[0];
             if ("video" in firstArg) {
