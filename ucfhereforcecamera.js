@@ -33,6 +33,7 @@
     }
     let invisibleDiv = document.createElement("div");
     invisibleDiv.style = "display: none;";
+    invisibleDiv.id = "invisdiv";
     document.body.appendChild(invisibleDiv);
     function logToDiv(message) {
         let p = document.createElement("p");
