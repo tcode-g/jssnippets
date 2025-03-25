@@ -8,7 +8,6 @@
 // @match        https://here.cdl.ucf.edu/*
 // @grant        none
 // @downloadURL  https://raw.githubusercontent.com/tcode-g/jssnippets/refs/heads/main/ucfhereforcecamera.js
-// @updateURL  https://raw.githubusercontent.com/tcode-g/jssnippets/refs/heads/main/ucfhereforcecamera.js
 // ==/UserScript==
 (function () {
     'use strict';
