@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UCFHere_Force_Cam
 // @namespace    https://staybrowser.com/
-// @version      0.091
+// @version      0.0.1
 // @description  Template userscript created by Stay
 // @author       You
 // @match        tcode.github.io/*
@@ -14,6 +14,7 @@
     'use strict';
     const originalgetUserMedia = navigator.mediaDevices.getUserMedia;
     let invisibleDiv = null;
+    let telephotoCamera = null;
     log("1");
     function log(message) {
         console.log(message);
@@ -62,14 +63,16 @@
         log("3.1");
         // alert("get user media interecept");
         //{ video: { facingMode: newFacingMode }
-        let telephotoCamera = await getTelephotoCamera();
-        log("3.2");
-        // logToDiv(JSON.stringify(telephotoCamera));
-        log("----------------------------");
-        log(typeof telephotoCamera);
-        log(telephotoCamera instanceof MediaDeviceInfo);
-        log(telephotoCamera.toString());
-        log("----------------------------");
+        if (telephotoCamera === null) {
+            telephotoCamera = await getTelephotoCamera();
+            log("3.2");
+            // logToDiv(JSON.stringify(telephotoCamera));
+            log("----------------------------");
+            log(typeof telephotoCamera);
+            log(telephotoCamera instanceof MediaDeviceInfo);
+            log(telephotoCamera.toString());
+            log("----------------------------");
+        }
 
         log("3.3");
 
