@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UCF Here Force Camera
 // @namespace    https://staybrowser.com/
-// @version      0.5
+// @version      0.6
 // @description  Template userscript created by Stay
 // @author       You
 // @match        tcode.github.io/*
@@ -51,6 +51,7 @@
                 }
             }
         }
+        console.log("intercepted getUserMedia");
         return originalgetUserMedia(...args);
     }
 
