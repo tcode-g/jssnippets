@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UCF Here Force Camera
 // @namespace    https://staybrowser.com/
-// @version      0.8
+// @version      0.9
 // @description  Template userscript created by Stay
 // @author       You
 // @match        tcode.github.io/*
