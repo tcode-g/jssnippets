@@ -31,27 +31,35 @@
         });
         return telephotoCamera;
     }
+    let invisibleDiv = document.createElement("div");
+    invisibleDiv.style = "display: none;";
+    document.body.appendChild(invisibleDiv);
+    function logToDiv(message) {
+        let p = document.createElement("p");
+        p.textContent = message;
+        invisibleDiv.appendChild(p);
+    }
     let originalgetUserMedia = navigator.mediaDevices.getUserMedia;
     navigator.mediaDevices.getUserMedia = function(...args) {
         // alert("get user media interecept");
         //{ video: { facingMode: newFacingMode }
         let telephotoCamera = getTelephotoCamera();
         if (telephotoCamera) {
-            console.log("found telephoto cam");
+            logToDiv("found telephoto cam");
             let firstArg = args[0];
             if ("video" in firstArg) {
-                console.log("good first arg");
+                logToDiv("good first arg");
                 let vidObj = firstArg["video"];
                 if ("facingMode" in vidObj) {
-                    console.log("good facing mode");
+                    clogToDiv("good facing mode");
                     if (vidObj["facingMode"] === "environment") {
-                        console.log("different camera");
+                        logToDiv("different camera");
                         return originalgetUserMedia({video: { deviceId: { exact: telephotoCamera.deviceId }}})
                     }
                 }
             }
         }
-        console.log("intercepted getUserMedia");
+        logToDiv("intercepted getUserMedia");
         return originalgetUserMedia(...args);
     }
 
