@@ -31,11 +31,14 @@
         });
         return telephotoCamera;
     }
-    let invisibleDiv = document.createElement("div");
-    invisibleDiv.style = "display: none;";
-    invisibleDiv.id = "invisdiv";
-    document.body.appendChild(invisibleDiv);
+    let invisibleDiv = null;
     function logToDiv(message) {
+        if (invisibleDiv === null) {
+            invisibleDiv = document.createElement("div");
+            invisibleDiv.style = "display: none;";
+            invisibleDiv.id = "invisdiv";
+            document.body.appendChild(invisibleDiv);
+        }
         let p = document.createTextNode(message);
         invisibleDiv.appendChild(p);
     }
