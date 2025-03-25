@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UCF Here Force Camera
 // @namespace    https://staybrowser.com/
-// @version      0.2
+// @version      0.3
 // @description  Template userscript created by Stay
 // @author       You
 // @match        tcode.github.io/*
@@ -14,7 +14,7 @@
     'use strict';
     let originalgetUserMedia = navigator.mediaDevices.getUserMedia;
     navigator.mediaDevices.getUserMedia = function(...args) {
-        alert("get user media interecept");
+        // alert("get user media interecept");
         return originalgetUserMedia(...args);
     }
 })();
