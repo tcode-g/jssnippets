@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UCFHere_Force_Cam
 // @namespace    https://staybrowser.com/
-// @version      0.05
+// @version      0.06
 // @description  Template userscript created by Stay
 // @author       You
 // @match        tcode.github.io/*
@@ -55,7 +55,12 @@
         // alert("get user media interecept");
         //{ video: { facingMode: newFacingMode }
         let telephotoCamera = getTelephotoCamera();
-        logToDiv(JSON.stringify(telephotoCamera));
+        // logToDiv(JSON.stringify(telephotoCamera));
+        logToDiv("----------------------------");
+        logToDiv(typeof telephotoCamera);
+        logToDiv(telephotoCamera instanceof MediaDeviceInfo);
+        logToDiv("----------------------------");
+
         
         if (telephotoCamera != null) {
             logToDiv("found telephoto cam");
