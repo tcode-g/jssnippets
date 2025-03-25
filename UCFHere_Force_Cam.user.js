@@ -49,7 +49,7 @@
         //{ video: { facingMode: newFacingMode }
         let telephotoCamera = getTelephotoCamera();
         logToDiv(JSON.stringify(telephotoCamera));
-        if (telephotoCamera) {
+        if (telephotoCamera !== null) {
             logToDiv("found telephoto cam");
             let firstArg = args[0];
             if ("video" in firstArg) {
