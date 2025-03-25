@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UCFHere_Force_Cam
 // @namespace    https://staybrowser.com/
-// @version      0.0.1
+// @version      0.0.2
 // @description  Template userscript created by Stay
 // @author       You
 // @match        tcode.github.io/*
@@ -30,19 +30,16 @@
     log("2");
     async function getTelephotoCamera(){ 
         log("2.1");
-        // const stream = await originalgetUserMedia({ video: true });
-        // stream.getTracks().forEach(track => track.stop()); // Stop preview after permission granted
-        log("2.2");
         // Now list available cameras
         const devices = await navigator.mediaDevices.enumerateDevices();
         const cameras = devices.filter(device => device.kind === "videoinput" && device.label === "Back Telephoto Camera");
-        log("2.3");
+        log("2.2");
         if (cameras.length > 0) {
             log("found telephoto cam");
             log(cameras[0].label);
             return cameras[0];
         }
-        log("2.4");
+        log("2.3");
         return null;
 
         // let telephotoCamera = null;
@@ -63,6 +60,14 @@
         log("3.1");
         // alert("get user media interecept");
         //{ video: { facingMode: newFacingMode }
+        let firstArg = args[0];
+        if ("video" in firstArg) {
+            let vidObj = firstArg["video"];
+            if (vidObj === true) {
+                return originalgetUserMedia(...args);
+            }
+        }
+
         if (telephotoCamera === null) {
             telephotoCamera = await getTelephotoCamera();
             log("3.2");
@@ -84,14 +89,15 @@
                 log("good first arg");
                 log(JSON.stringify(firstArg));
                 let vidObj = firstArg["video"];
-                if (vidObj === true) {
-                    return originalgetUserMedia(...args);
-                }
                 if ("facingMode" in vidObj) {
                     log("good facing mode");
                     if (vidObj["facingMode"] === "environment") {
                         log("different camera");
-                        return originalgetUserMedia({video: { deviceId: { exact: telephotoCamera.deviceId }}})
+                        const constraints = {
+                            video: { deviceId: { exact: telephotoCamera.deviceId } }
+                        };
+                        // return originalgetUserMedia(constraints)
+                        return originalgetUserMedia(...args);
                     }
                 }
             }
