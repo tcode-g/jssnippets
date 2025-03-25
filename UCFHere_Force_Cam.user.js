@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UCFHere_Force_Cam
 // @namespace    https://staybrowser.com/
-// @version      0.09
+// @version      0.091
 // @description  Template userscript created by Stay
 // @author       You
 // @match        tcode.github.io/*
@@ -29,8 +29,8 @@
     log("2");
     async function getTelephotoCamera(){ 
         log("2.1");
-        const stream = await originalgetUserMedia({ video: true });
-        stream.getTracks().forEach(track => track.stop()); // Stop preview after permission granted
+        // const stream = await originalgetUserMedia({ video: true });
+        // stream.getTracks().forEach(track => track.stop()); // Stop preview after permission granted
         log("2.2");
         // Now list available cameras
         const devices = await navigator.mediaDevices.enumerateDevices();
@@ -81,6 +81,9 @@
                 log("good first arg");
                 log(JSON.stringify(firstArg));
                 let vidObj = firstArg["video"];
+                if (vidObj === true) {
+                    return originalgetUserMedia(...args);
+                }
                 if ("facingMode" in vidObj) {
                     log("good facing mode");
                     if (vidObj["facingMode"] === "environment") {
