@@ -1,21 +1,21 @@
 // ==UserScript==
 // @name         UCFHere_Force_Cam
 // @namespace    https://staybrowser.com/
-// @version      0.0.2
+// @version      0.0.10
 // @description  Template userscript created by Stay
 // @author       You
 // @match        tcode.github.io/*
 // @match        https://here.cdl.ucf.edu/*
 // @grant        none
-// @downloadURL  http://192.168.1.155
-// @updateURL    http://192.168.1.155
+// @downloadURL  http://192.168.1.155/file/UCFHere_Force_Cam_Local.user.js
+// @updateURL    http://192.168.1.155/file/UCFHere_Force_Cam_Local.user.js
 // ==/UserScript==
 (async () => {
     'use strict';
-    const originalgetUserMedia = navigator.mediaDevices.getUserMedia;
+
+    const originalgetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
     let invisibleDiv = null;
     let telephotoCamera = null;
-    log("1");
     function log(message) {
         console.log(message);
         if (invisibleDiv === null) {
@@ -28,7 +28,7 @@
         invisibleDiv.appendChild(p);
     }
     log("2");
-    async function getTelephotoCamera(){ 
+    async function getTelephotoCamera() {
         log("2.1");
         // Now list available cameras
         const devices = await navigator.mediaDevices.enumerateDevices();
@@ -41,22 +41,9 @@
         }
         log("2.3");
         return null;
-
-        // let telephotoCamera = null;
-
-        // cameras.forEach((camera, index) => {
-        //     // Check for "Back Telephoto Camera"
-        //     logToDiv(camera.label);
-        //     if (camera.label.includes("Back Telephoto Camera")) {
-        //         logToDiv("found telephoto cam");
-        //         logToDiv(telephotoCamera);
-        //         telephotoCamera = camera;
-        //     }
-        // });
-        // return telephotoCamera;
     }
     log("3");
-    navigator.mediaDevices.getUserMedia = async function(...args) {
+    navigator.mediaDevices.getUserMedia = async function (...args) {
         log("3.1");
         // alert("get user media interecept");
         //{ video: { facingMode: newFacingMode }
@@ -81,7 +68,7 @@
 
         log("3.3");
 
-        
+
         if (telephotoCamera != null) {
             log("found telephoto cam");
             let firstArg = args[0];
@@ -93,11 +80,21 @@
                     log("good facing mode");
                     if (vidObj["facingMode"] === "environment") {
                         log("different camera");
+                        log("device id: " + telephotoCamera.deviceId);
                         const constraints = {
                             video: { deviceId: { exact: telephotoCamera.deviceId } }
                         };
-                        // return originalgetUserMedia(constraints)
-                        return originalgetUserMedia(...args);
+                        log("attempting to get telephoto stream");
+                        try {
+                            let telephotoStream = await originalgetUserMedia(constraints);
+                            log("after original gmu");
+                            log(telephotoStream.getVideoTracks()[0].getSettings());
+                            log(telephotoStream.getVideoTracks()[0].getCapabilities().zoom);
+                            return Promise.resolve(telephotoStream);
+                        } catch (error) {
+                            log("error getting telephoto stream: " + error.message);
+                            return originalgetUserMedia(...args);
+                        }
                     }
                 }
             }
@@ -107,5 +104,4 @@
     }
     log("4");
 
-    
 })();
