@@ -13,6 +13,8 @@
 (async () => {
     'use strict';
 
+    const DEBUG = true;
+
     const originalgetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
     let telephotoCamera = null;
 
@@ -20,23 +22,31 @@
         return new Promise((resolve) => setTimeout(resolve, delay));
     };
 
+    function print(...args) {
+        if (DEBUG) {
+            console.log("[DEBUG]:", ...args);
+        }
+    }
+    
+    async function getTelephotoCamera() {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        print("Devices: ", devices);
+        const cameras = devices.filter(device => device.kind === "videoinput" && device.label === "Back Telephoto Camera");
+        if (cameras.length > 0) {
+            return cameras[0];
+        }
+        print("No camera found.");
+        return null;
+    }
     async function waitTryTelephotoCamera() {
         let tries = 0;
-        while (tries < 5) {
+        while (tries < 120) { // a full minute
             let camera = getTelephotoCamera();
             if (camera != null) {
                 return camera;
             }
             await sleep(500);
             tries += 1;
-        }
-        return null;
-    }
-    async function getTelephotoCamera() {
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        const cameras = devices.filter(device => device.kind === "videoinput" && device.label === "Back Telephoto Camera");
-        if (cameras.length > 0) {
-            return cameras[0];
         }
         return null;
     }
@@ -50,9 +60,13 @@
             }
         }
 
+        print("Passed check 1");
+
         if (telephotoCamera === null) {
             telephotoCamera = await waitTryTelephotoCamera();
         }
+
+        print("Passed check 2");
 
         if (telephotoCamera != null) {
             if ("video" in firstArg) {
@@ -63,14 +77,17 @@
                             video: { deviceId: { exact: telephotoCamera.deviceId } }
                         };
                         try {
+                            print("Intercepted camera");
                             return originalgetUserMedia(constraints);
                         } catch (error) {
+                            print("Didn't intercept camera");
                             return originalgetUserMedia(...args);
                         }
                     }
                 }
             }
         }
+        print("DIdn't intercept camera");
         return originalgetUserMedia(...args);
     }
 })();
