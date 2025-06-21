@@ -6,8 +6,8 @@
 // @author       tcode-g
 // @match        https://here.cdl.ucf.edu/*
 // @grant        none
-// @downloadURL  https://raw.githubusercontent.com/tcode-g/jssnippets/refs/heads/main/UCFHereCam/UCFHerForceCam.user.js
-// @updateURL    https://raw.githubusercontent.com/tcode-g/jssnippets/refs/heads/main/UCFHereCam/UCFHerForceCam.user.js
+// @downloadURL  https://raw.githubusercontent.com/tcode-g/jssnippets/refs/heads/main/UCFHereCam/UCFHereForceCam.user.js
+// @updateURL    https://raw.githubusercontent.com/tcode-g/jssnippets/refs/heads/main/UCFHereCam/UCFHereForceCam.user.js
 // ==/UserScript==
 
 (async () => {
