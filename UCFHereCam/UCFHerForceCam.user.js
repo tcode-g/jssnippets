@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name         UCFHere_Force_Cam
 // @namespace    https://github.com/tcode-g
-// @version      1.0
+// @version      1.0.1
 // @description  Intercepts getUserMedia used by UCF Here to force use the camera with the most zoom.
 // @author       tcode-g
 // @match        https://here.cdl.ucf.edu/*
 // @grant        none
-// @downloadURL  https://raw.githubusercontent.com/tcode-g/jssnippets/refs/heads/main/UCFHereCam/UCF_Here_Force_Cam_Final.user.js
-// @updateURL    https://raw.githubusercontent.com/tcode-g/jssnippets/refs/heads/main/UCFHereCam/UCF_Here_Force_Cam_Final.user.js
+// @downloadURL  https://raw.githubusercontent.com/tcode-g/jssnippets/refs/heads/main/UCFHereCam/UCFHerForceCam.user.js
+// @updateURL    https://raw.githubusercontent.com/tcode-g/jssnippets/refs/heads/main/UCFHereCam/UCFHerForceCam.user.js
 // ==/UserScript==
 
 (async () => {
@@ -16,6 +16,22 @@
     const originalgetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
     let telephotoCamera = null;
 
+    const sleep = (delay) => {
+        return new Promise((resolve) => setTimeout(resolve, delay));
+    };
+
+    async function waitTryTelephotoCamera() {
+        let tries = 0;
+        while (tries < 5) {
+            let camera = getTelephotoCamera();
+            if (camera != null) {
+                return camera;
+            }
+            await sleep(500);
+            tries += 1;
+        }
+        return null;
+    }
     async function getTelephotoCamera() {
         const devices = await navigator.mediaDevices.enumerateDevices();
         const cameras = devices.filter(device => device.kind === "videoinput" && device.label === "Back Telephoto Camera");
@@ -35,7 +51,7 @@
         }
 
         if (telephotoCamera === null) {
-            telephotoCamera = await getTelephotoCamera();
+            telephotoCamera = await waitTryTelephotoCamera();
         }
 
         if (telephotoCamera != null) {
