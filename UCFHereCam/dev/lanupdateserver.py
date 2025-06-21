@@ -7,7 +7,7 @@ current_directory = os.path.dirname(__file__)
 parent_directory = os.path.abspath(os.path.join(current_directory, os.pardir))
 file_path = os.path.join(parent_directory, 'UCFHereForceCam.user.js')
 
-@app.route("/UCFHerForceCam.user.js")
+@app.route("/UCFHereForceCam.user.js")
 def jsfile():
 
     with open(file_path, "r") as file:
