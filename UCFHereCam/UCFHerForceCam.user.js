@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UCFHere_Force_Cam
 // @namespace    https://github.com/tcode-g
-// @version      1.0.1
+// @version      1.0.2
 // @description  Intercepts getUserMedia used by UCF Here to force use the camera with the most zoom.
 // @author       tcode-g
 // @match        https://here.cdl.ucf.edu/*
