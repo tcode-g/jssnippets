@@ -1,0 +1,1 @@
+.\environment\Scripts\python lanupdateserver.py
