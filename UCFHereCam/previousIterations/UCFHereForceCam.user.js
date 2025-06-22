@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         UCFHere_Force_Cam
+// @name         UCFHere_Best_Cam_Intercept
 // @namespace    https://github.com/tcode-g
-// @version      1.0.2
+// @version      1.0.16
 // @description  Intercepts getUserMedia used by UCF Here to force use the camera with the most zoom.
 // @author       tcode-g
 // @match        https://here.cdl.ucf.edu/*
@@ -10,13 +10,22 @@
 // @updateURL    https://raw.githubusercontent.com/tcode-g/jssnippets/refs/heads/main/UCFHereCam/UCFHereForceCam.user.js
 // ==/UserScript==
 
+console.log("Start of intercept script");
+
 (async () => {
     'use strict';
 
     const DEBUG = true;
+    const retryForInSeconds = 5;
+
+    // ask for permission first
+    // await navigator.mediaDevices.getUserMedia({video: true});
+
+    console.log("After permission grant");
 
     const originalgetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
     let telephotoCamera = null;
+
 
     const sleep = (delay) => {
         return new Promise((resolve) => setTimeout(resolve, delay));
@@ -27,6 +36,8 @@
             console.log("[DEBUG]:", ...args);
         }
     }
+
+    print("Before getTelephotoCamera");
     
     async function getTelephotoCamera() {
         const devices = await navigator.mediaDevices.enumerateDevices();
@@ -40,13 +51,16 @@
     }
     async function waitTryTelephotoCamera() {
         let tries = 0;
-        while (tries < 120) { // a full minute
-            let camera = getTelephotoCamera();
+        while (tries < retryForInSeconds * 2) {
+            print("start trying getTelephotoCamera()");
+            let camera = await getTelephotoCamera();
             if (camera != null) {
+                print("shouldn't return unless has camera", camera);
                 return camera;
             }
             await sleep(500);
             tries += 1;
+            print("next try");
         }
         return null;
     }
@@ -62,7 +76,8 @@
 
         print("Passed check 1");
 
-        if (telephotoCamera === null) {
+        if (telephotoCamera == null) {
+            print("Telephoto cam is null");
             telephotoCamera = await waitTryTelephotoCamera();
         }
 
@@ -87,7 +102,7 @@
                 }
             }
         }
-        print("DIdn't intercept camera");
+        print("Didn't intercept camera");
         return originalgetUserMedia(...args);
     }
 })();
